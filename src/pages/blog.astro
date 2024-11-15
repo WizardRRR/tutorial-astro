@@ -1,0 +1,27 @@
+---
+import BlogPost from "../components/BlogPost.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+interface BlogPost {
+  url: string;
+  frontmatter: {
+    title: string;
+  };
+}
+
+const allPosts = Object.values(
+  await import.meta.glob<BlogPost>("./posts/*.md", { eager: true })
+) as BlogPost[];
+---
+
+<BaseLayout pageTitle="My Astro Learning Blog">
+  <p>This is where I will post about my journey learning Astro.</p>
+
+  <ul>
+    {
+      allPosts.map((post) => (
+        <BlogPost url={post.url} title={post.frontmatter.title} />
+      ))
+    }
+  </ul>
+</BaseLayout>
